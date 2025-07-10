@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect
 import sqlite3
 from datetime import datetime
@@ -8,17 +9,7 @@ DATABASE = 'sqlite_database/tips_calculator.db'
 def init_db():
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS tips (
-            id INTEGER PRIMARY KEY,
-            bill REAL,
-            tip_percent REAL,
-            people INTEGER,
-            tip_amount REAL,
-            total_amount REAL,
-            per_person REAL,
-            created_at TEXT
-        )
+    c.execute('''CREATE TABLE IF NOT EXISTS tips (id INTEGER PRIMARY KEY, bill REAL, tip_percent REAL, people INTEGER, tip_amount REAL, total_amount REAL, per_person REAL, created_at TEXT )
     ''')
     conn.commit()
     conn.close()
@@ -59,5 +50,4 @@ def history():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
-
 
