@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tip Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -23,6 +25,19 @@
         <p>Each Pays: {{ per_person }}</p>
     {% endif %}
 
-    <a href="/history">HISTORY</a>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p style="color:green;">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <p>
+        <a href="/logout">Logout</a>
+        <a href="/history">HISTORY</a
+    </p>
+
+
+
+    
 </body>
 </html>
