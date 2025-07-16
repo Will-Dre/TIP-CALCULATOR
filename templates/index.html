@@ -1,43 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tip Calculator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h2><b>TIP CALCULATOR</b></h2>
-    <form method="POST">
-        <label>Bill Amount:</label>
-        <input type="number" step="1.0" name="bill" required><br>
-        <label>Tip Percentage:</label>
-        <input type="number" step="1.0" name="tip_percent" value="15" required><br>
-        <label>Number of People:</label>
-        <input type="number" name="people" value="1" required><br>
-        <button type="submit">Calculate</button>
-    </form>
-
-    {% if tip %}
-        <h3>RESULTS:</h3>
-        <p>Tip: {{ tip }}</p>
-        <p>Total: {{ total }}</p>
-        <p>Each Pays: {{ per_person }}</p>
-    {% endif %}
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <p style="color:green;">{{ message }}</p>
-        {% endfor %}
-    {% endwith %}
-
-    <p>
-        <a href="/logout">Logout</a>
-        <a href="/history">HISTORY</a
-    </p>
-
-
-
-    
-</body>
-</html>
+{% extends 'base.html' %} {% block title %}Tip Calculator{% endblock %} {% block
+content %}
+<div class="card">
+  <h2>Tip Calculator</h2>
+  <form method="POST">
+    <label>Bill Amount:</label>
+    <input type="number" step="0.01" name="bill" required />
+    <label>Tip Percentage:</label>
+    <input type="number" step="1" name="tip_percent" value="15" required />
+    <label>Number of People:</label>
+    <input type="number" name="people" value="1" required />
+    <button type="submit">Calculate</button>
+  </form>
+  {% if tip %}
+  <div class="results">
+    <h3>Results</h3>
+    <p><b>Tip:</b> UGX {{ tip }}</p>
+    <p><b>Total:</b> UGX {{ total }}</p>
+    <p><b>Each Pays:</b> UGX {{ per_person }}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

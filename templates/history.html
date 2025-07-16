@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculation History</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h2>Last 10 Tip Calculations</h2>
-    <table>
-        <tr>
-            <th>Bill</th>
-            <th>Tip %</th>
-            <th>Tip Amount</th>
-            <th>Total</th>
-        </tr>
-        {% for row in records %}
-        <tr>
-            <td>${{ row[1] }}</td>
-            <td>{{ row[2] }}%</td>
-            <td>${{ row[3] }}</td>
-            <td>${{ row[4] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <br>
-    <a href="/">Back to Calculator</a>
-</body>
-</html>
+{% extends 'base.html' %} {% block title %}Calculation History{% endblock %} {%
+block content %}
+<div class="card">
+  <h2>Last 10 Tip Calculations</h2>
+  <table>
+    <tr>
+      <th>Bill</th>
+      <th>Tip %</th>
+      <th>Tip Amount</th>
+      <th>Total</th>
+    </tr>
+    {% for row in records %}
+    <tr>
+      <td>UGX {{ row[1] }}</td>
+      <td>{{ row[2] }}%</td>
+      <td>UGX {{ row[3] }}</td>
+      <td>UGX {{ row[4] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <a class="back-btn" href="/">Back to Calculator</a>
+</div>
+{% endblock %}

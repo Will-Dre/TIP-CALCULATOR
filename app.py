@@ -18,10 +18,16 @@ def init_db():
     conn.commit()
     conn.close()
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    flash('You have been logged out.', 'info')
+    return redirect('/login')
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if 'username' not in session:
-        session['username'] = None
+    # Require login for this route
+    if 'username' not in session or not session['username']:
         return redirect('/login')  # Redirect if not logged in
 
     # Now this part only runs if user IS logged in:
@@ -50,6 +56,9 @@ def index():
 
 @app.route('/history')
 def history():
+    # Require login for this route
+    if 'username' not in session or not session['username']:
+        return redirect('/login')
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     c.execute("SELECT * FROM tips ORDER BY created_at DESC")
@@ -59,10 +68,12 @@ def history():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if 'username' in session and session['username']:
+        return redirect('/')  # Already logged in
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        hashed_password = generate_password_hash(password)
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
         try:
             conn = sqlite3.connect(DATABASE)
@@ -92,6 +103,8 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'username' in session and session['username']:
+        return redirect('/')  # Already logged in
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -112,6 +125,9 @@ def login():
             flash('Invalid username or password.', 'danger')
 
     return render_template('login.html')
+# Set a secret key for session management
+app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_key')
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
