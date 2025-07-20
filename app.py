@@ -5,6 +5,8 @@ import sqlite3
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = 'supersecretkey123'
+
 DATABASE = 'sqlite_database/tips_calculator.db'
 
 def init_db():
@@ -52,7 +54,7 @@ def index():
 def history():
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    c.execute("SELECT * FROM tips ORDER BY created_at DESC")
+    c.execute("SELECT * FROM tips ORDER BY created_at DESC LIMIT 10")
     data = c.fetchall()
     conn.close()
     return render_template('history.html', records=data)
@@ -112,6 +114,12 @@ def login():
             flash('Invalid username or password.', 'danger')
 
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Removes all session data
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('login'))  # Redirect back to login page
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
